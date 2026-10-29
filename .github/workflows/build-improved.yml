@@ -1,0 +1,55 @@
+name: Build Improved Index
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'PATCH.md'
+      - '.github/workflows/build-improved.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download original and apply patch
+        run: |
+          curl -sL "https://raw.githubusercontent.com/csfclayton/gunpla/main/index.html" -o original.html
+          python3 << 'PY'
+          with open("original.html") as f:
+              content = f.read()
+          # Apply improvements
+          content = content.replace('<html lang="en">', '<html lang="zh-Hant">')
+          meta = '''    <meta name="description" content="GunplaBase MG — 高達模型 MG 收藏管理大師。建立山積清單、標記已完成神作，快速探索 Ver.Ka、各年代經典高達模型。支援離線使用、多貨幣、批量標籤。" />
+    <meta name="theme-color" content="#0a0f1a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta property="og:title" content="GunplaBase MG — 高達模型收藏管理大師" />
+    <meta property="og:description" content="高達模型 MG 收藏管理工具。建立山積清單、標記已完成，支援離線與多貨幣。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://csfclayton.github.io/gunpla-improve/" />
+    <meta property="og:locale" content="zh_HK" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="GunplaBase MG — 高達模型收藏管理大師" />
+    <meta name="twitter:description" content="高達模型 MG 收藏管理工具。建立山積清單、標記已完成，支援離線與多貨幣。" />
+'''
+          content = content.replace(
+              '<meta name="viewport" content="width=device-width, initial-scale=1.0" />',
+              '<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n' + meta
+          )
+          with open("index.html", "w") as f:
+              f.write(content)
+          print("Patched index.html written, size:", len(content))
+          PY
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --staged --quiet || git commit -m "chore: build improved index.html with SEO + lang=zh-Hant"
+          git push
