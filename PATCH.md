@@ -26,7 +26,7 @@ Replace the opening of index.html:
     <meta property="og:title" content="GunplaBase MG — 高達模型收藏管理大師" />
     <meta property="og:description" content="高達模型 MG 收藏管理工具。建立山積清單、標記已完成，支援離線與多貨幣。" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://csfclayton.github.io/gunpla/" />
+    <meta property="og:url" content="https://csfclayton.github.io/gunpla-improve/" />
     <meta property="og:locale" content="zh_HK" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="GunplaBase MG — 高達模型收藏管理大師" />
@@ -35,3 +35,6 @@ Replace the opening of index.html:
 ```
 
 The rest of the file stays exactly the same.
+
+---
+Triggered rebuild: 2026-10-29
